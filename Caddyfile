@@ -1,0 +1,10 @@
+www.yeoni-farm.com {
+    root * /home/farmer/data/yeoni
+    file_server
+    encode gzip
+
+    # HTTPS 자동 (Let's Encrypt)
+    tls yeonifarm@gmail.com
+}
+
+# HTTP → HTTPS 자동 리다이렉트 (Caddy 기본 동작)
