@@ -18,8 +18,10 @@
 - 경로: /home/farmer/data/yeoni
 - 서버 IP (사설): 172.30.1.36
 - 공인 IP: 59.30.148.202
-- 시작: `bash /home/farmer/data/yeoni/start-server.sh`
-- 로그: /tmp/caddy.log
+- 시작: systemd 사용자 서비스 `yeoni-farm.service` (부팅 자동 시작)
+- 서비스 파일: `/home/farmer/data/yeoni/systemd/yeoni-farm.service`
+- 수동 시작 스크립트: `bash /home/farmer/data/yeoni/start-server.sh`
+- 로그: `journalctl --user -u yeoni-farm.service -f`
 
 ### GitHub Pages (클라우드 백업)
 - URL: https://kikim66.github.io/yeonifarm/
@@ -116,18 +118,21 @@ img = Image.open('logo.png').convert('RGB')
 
 ## 서버 관리 명령어
 ```bash
-# 서버 시작
-bash /home/farmer/data/yeoni/start-server.sh
+# 부팅 자동 시작 등록
+systemctl --user link /home/farmer/data/yeoni/systemd/yeoni-farm.service
+systemctl --user enable --now yeoni-farm.service
 
 # 상태 확인
-ps aux | grep "caddy run" | grep -v grep
-curl -o /dev/null -w "%{http_code}" http://localhost:80/ 2>/dev/null
+systemctl --user status yeoni-farm.service --no-pager
+systemctl --user is-enabled yeoni-farm.service
+curl -I https://www.yeoni-farm.com
 
 # 로그 확인
-tail -f /tmp/caddy.log
+journalctl --user -u yeoni-farm.service -f
 
-# 서버 중지
-pkill -f "caddy run"
+# 서버 재시작/중지
+systemctl --user restart yeoni-farm.service
+systemctl --user stop yeoni-farm.service
 ```
 
 ## 주요 도구

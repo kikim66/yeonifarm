@@ -6,14 +6,18 @@
 - **운영**: https://www.yeoni-farm.com
 - **GitHub Pages**: https://kikim66.github.io/yeonifarm/
 
-## 서버 시작
+## 서버 관리
 
 ```bash
 # 최초 1회만 (터미널에서 직접 실행)
 sudo setcap 'cap_net_bind_service=+ep' /home/farmer/.local/bin/caddy
 
-# 서버 시작 (이후 매번)
-bash /home/farmer/data/yeoni/start-server.sh
+# 부팅 자동 시작 등록
+systemctl --user link /home/farmer/data/yeoni/systemd/yeoni-farm.service
+systemctl --user enable --now yeoni-farm.service
+
+# 상태 확인
+systemctl --user status yeoni-farm.service --no-pager
 ```
 
 ## 파일 구성
@@ -23,6 +27,7 @@ bash /home/farmer/data/yeoni/start-server.sh
 | `index.html` | 메인 사이트 |
 | `Caddyfile` | 웹서버 설정 (HTTP/HTTPS 자동) |
 | `start-server.sh` | 서버 시작 스크립트 |
+| `systemd/yeoni-farm.service` | 부팅 자동 시작용 systemd 사용자 서비스 |
 | `logo-clean.png` | 여백 제거 로고 (실제 사용) |
 | `logo.png` | 원본 로고 |
 | `pictures/` | 상황버섯 실사 사진 20장 |
