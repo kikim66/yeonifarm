@@ -281,6 +281,16 @@
     .contact-item-label { font-size: 12px; color: var(--text-light); margin-bottom: 3px; }
     .contact-item-value { font-size: 15px; font-weight: 600; }
     .contact-item-value.small { font-size: 14px; letter-spacing: 0.5px; }
+    .contact-action {
+      color: var(--text); text-decoration: none; border: 0; background: transparent;
+      padding: 0; font: inherit; cursor: pointer; transition: color .2s;
+    }
+    .contact-action:hover { color: var(--primary); }
+    .copy-feedback {
+      display: inline-block; margin-left: 8px; font-size: 12px; color: var(--primary);
+      opacity: 0; transition: opacity .2s;
+    }
+    .copy-feedback.show { opacity: 1; }
     .order-guide {
       background: var(--surface); border-radius: 14px; padding: 28px; border: 1px solid var(--border);
     }
@@ -304,6 +314,8 @@
     .footer-logo { font-size: 18px; font-weight: 700; color: #fff; }
     .footer-text { font-size: 13px; line-height: 1.7; }
     .footer-contact { font-size: 13px; text-align: right; line-height: 1.8; }
+    .footer-contact .contact-action { color: rgba(255,255,255,0.7); }
+    .footer-contact .contact-action:hover { color: #D4A84B; }
 
     /* ── MOBILE ── */
     @media (max-width: 768px) {
@@ -525,21 +537,24 @@
             <div class="contact-item-icon">📞</div>
             <div>
               <div class="contact-item-label">전화 상담</div>
-              <div class="contact-item-value">010-3319-5913</div>
+              <div class="contact-item-value"><a class="contact-action" href="tel:010-3319-5913">010-3319-5913</a></div>
             </div>
           </div>
           <div class="contact-item">
             <div class="contact-item-icon">✉️</div>
             <div>
               <div class="contact-item-label">이메일</div>
-              <div class="contact-item-value">yeonifarm@gmail.com</div>
+              <div class="contact-item-value"><a class="contact-action" href="mailto:yeonifarm@gmail.com?subject=%EC%97%AC%EB%8B%88%ED%8C%9C%20%EC%A3%BC%EB%AC%B8%20%EB%AC%B8%EC%9D%98&body=%EC%95%88%EB%85%95%ED%95%98%EC%84%B8%EC%9A%94.%20%EC%83%81%ED%99%A9%EB%B2%84%EC%84%AF%20%EC%A3%BC%EB%AC%B8%20%EB%AC%B8%EC%9D%98%EB%93%9C%EB%A6%BD%EB%8B%88%EB%8B%A4.">yeonifarm@gmail.com</a></div>
             </div>
           </div>
           <div class="contact-item">
             <div class="contact-item-icon">🏦</div>
             <div>
               <div class="contact-item-label">계좌번호 (이수연)</div>
-              <div class="contact-item-value small">농협 351-1308-1385-83</div>
+              <div class="contact-item-value small">
+                <button class="contact-action" type="button" onclick="copyAccountNumber(this)">농협 351-1308-1385-83</button>
+                <span class="copy-feedback" aria-live="polite">복사됨</span>
+              </div>
             </div>
           </div>
         </div>
@@ -581,7 +596,7 @@
     </div>
     <div class="footer-contact">
       📞 010-3319-5913<br>
-      ✉️ yeonifarm@gmail.com
+      ✉️ <a class="contact-action" href="mailto:yeonifarm@gmail.com?subject=%EC%97%AC%EB%8B%88%ED%8C%9C%20%EC%A3%BC%EB%AC%B8%20%EB%AC%B8%EC%9D%98&body=%EC%95%88%EB%85%95%ED%95%98%EC%84%B8%EC%9A%94.%20%EC%83%81%ED%99%A9%EB%B2%84%EC%84%AF%20%EC%A3%BC%EB%AC%B8%20%EB%AC%B8%EC%9D%98%EB%93%9C%EB%A6%BD%EB%8B%88%EB%8B%A4.">yeonifarm@gmail.com</a>
     </div>
   </div>
 </footer>
@@ -600,6 +615,16 @@
   function closeLightbox() {
     document.getElementById('lightbox').classList.remove('open');
     document.body.style.overflow = '';
+  }
+  function copyAccountNumber(button) {
+    const accountNumber = '농협 351-1308-1385-83 이수연';
+    const feedback = button.parentElement.querySelector('.copy-feedback');
+    navigator.clipboard.writeText(accountNumber).then(() => {
+      feedback.classList.add('show');
+      setTimeout(() => feedback.classList.remove('show'), 1600);
+    }).catch(() => {
+      window.prompt('계좌번호를 복사해 주세요.', accountNumber);
+    });
   }
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
 </script>
