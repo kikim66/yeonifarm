@@ -1,0 +1,4 @@
+harnes_vive/
+.claude/
+*.log
+__pycache__/
